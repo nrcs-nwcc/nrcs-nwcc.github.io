@@ -8,5 +8,11 @@
   <li>
     <a href="https://api.snowdata.info">awdb API Testing Site</a>
     </li>
+    <li>
+      <a href="https://nrcs-nwcc.github.io/ErrorLog_July20.html">Most recent Meteor Burst Error Log</a>
+    </li>
+    <li>
+      <a href="https://nrcs-nwcc.github.io/missing_photos.html">Missing site photos</a>
+    </li>
   </ul>
 </html>
