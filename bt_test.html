@@ -3763,6 +3763,15 @@ var minTrace = {
   line: {color: 'red'},
 };
 
+var percentChange = {
+  x: dataObj.date,
+  y: dataObj['Change (%)'],
+  name: '% Change',
+  yaxis: 'y2',
+  type: 'scatter',
+  line: {color: 'rgba(148, 103, 189,0.5)', dash: 'dot'},
+};
+
 var layout = {
   xaxis: {
     type: 'date',
@@ -3771,6 +3780,14 @@ var layout = {
   },
   yaxis: {
     title: 'Inches'
+  },
+  yaxis2: {
+    title: '% Change',
+    titlefont: {color: 'rgba(148, 103, 189,0.5)'},
+    tickfont: {color: 'rgba(148, 103, 189, 0.5)'},
+    overlaying: 'y',
+    side: 'right',
+    range: [-5,20],
   },
   hovermode: 'x unified',
   legend: {orientation: 'v', bordercolor: "#E2E2E2", borderwidth: 2},
@@ -3798,7 +3815,7 @@ var config = {
             "drawtext",
         ],
     };
-var traceData = [maxTrace, oldNormTrace, newNormTrace, minTrace];
+var traceData = [maxTrace, oldNormTrace, newNormTrace, minTrace, percentChange];
 
 Plotly.newPlot('normsPlot', traceData, layout, config);
          })
