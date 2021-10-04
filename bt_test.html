@@ -22,7 +22,6 @@
                data-sort-name="name"
                data-sort-order="asc"
                data-show-pagination-switch="true"
-               data-show-refresh="true"
                data-show-toggle="true"
                data-show-columns="true"
                data-show-fullscreen="true"
@@ -3743,7 +3742,7 @@ var newNormTrace = {
   name: 'New Normal',
   line: {color: 'green'},
   text: dataObj['Change (%)'],
-  hovertemplate :'%{y}'+'<br>' + 'Change: %{text} %',
+  hovertemplate :'%{y}'+'<br>' + 'Change: %{text}%',
 };
 
 var maxTrace = {
@@ -3779,9 +3778,29 @@ var layout = {
   autosize: true,
 };
 
+var config = {
+        modeBarButtonsToRemove: ["sendDataToCloud", "lasso2d", "select2d"],
+        showAxisDragHandles: true,
+        showAxisRangeEntryBoxes: true,
+        displaylogo: false,
+        toImageButtonOptions: {
+            filename: 'Normals_comp.png',
+            width: 1200,
+            height: 700,
+        },
+        modeBarButtonsToAdd: [
+            "drawline",
+            "drawopenpath",
+            "drawclosedpath",
+            "drawcircle",
+            "drawrect",
+            "eraseshape",
+            "drawtext",
+        ],
+    };
 var traceData = [maxTrace, oldNormTrace, newNormTrace, minTrace];
 
-Plotly.newPlot('normsPlot', traceData, layout);
+Plotly.newPlot('normsPlot', traceData, layout, config);
          })
       </script>
    </body>
