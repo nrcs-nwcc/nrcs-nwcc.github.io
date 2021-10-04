@@ -14,5 +14,8 @@
     <li>
       <a href="https://nrcs-nwcc.github.io/missing_photos.html">Missing site photos</a>
     </li>
+    <li>
+      <a href="https://nrcs-nwcc.github.io/bt_test.html">Normals Comp Test Page</a>
+    </li>
   </ul>
 </html>
