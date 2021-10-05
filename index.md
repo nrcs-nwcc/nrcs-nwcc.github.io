@@ -20,5 +20,8 @@
     <li>
       <a href="https://nrcs-nwcc.github.io/bt_test_wteq.html">WTEQ Normals Comp Test Page</a>
     </li>
+    <li>
+      <a href="https://nrcs-nwcc.github.io/missing_norm_test.html">MISSING Normals Comp Test Page</a>
+    </li>
   </ul>
 </html>
