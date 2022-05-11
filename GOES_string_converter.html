@@ -4,94 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>GOES String Converter</title>
 </head>
 <body>
     <style>
-            .alltables{
-                font-family: Arial, Helvetica, sans-serif;
-                border-collapse: collapse;
+        .alltables{
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
 
-            }
-            .alltables td, #explanation th {
-                border: 1px solid #ddd;
-                padding: 8px;
-            }
-            .alltables tr:nth-child(even){
-                background-color: #f2f2f2;
-            }
-            .alltables th {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                text-align: left;
-                background-color: rgb(56, 56, 56);
-                color: white;
-            }
-            /* Style the tab */
-            .tab {
-                overflow: hidden;
-                background-color: rgb(36, 112, 169);
-                width: 100%;
-                height: 60px;
-            }
-        
-            /* Style the buttons inside the tab */
-            .tab button {
-                background-color: inherit;
-                text-align: center;
-                vertical-align: center;
-                float: left;
-                border: none;
-                outline: none;
-                cursor: pointer;
-                transition: 0.3s;
-                font-size: 17px;
-                color: white;
-                width:50%;
-                height: inherit;
-            }
-        
-            /* Change background color of buttons on hover */
-            .tab button:hover {
-                background-color: rgb(86, 140, 169);
-            }
-        
-            /* Create an active/current tablink class */
-            .tab button.active {
-                background-color: rgb(52, 83, 100);
-            }
-        
-            /* Style the tab content */
-            .tabcontent {
-                display: none;
-                padding-top: 0px;
-                width: 100%;
-                height: Auto;
-            }
-        </style>
+        }
+        .alltables td, #explanation th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .alltables tr:nth-child(even){
+            background-color: #f2f2f2;
+        }
+        .alltables th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: rgb(56, 56, 56);
+            color: white;
+        }
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            background-color: rgb(36, 112, 169);
+            width: 100%;
+            height: 60px;
+        }
+    
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            text-align: center;
+            vertical-align: center;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 17px;
+            color: white;
+            width:50%;
+            height: inherit;
+        }
+    
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: rgb(86, 140, 169);
+        }
+    
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: rgb(52, 83, 100);
+        }
+    
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding-top: 0px;
+            width: 100%;
+            height: Auto;
+        }
+    </style>
+    <!--Top Navagation bar to toggle between GOES string converter and CODCO mapping calc-->
     <div class="tab" id="topNav">
         <button class="tablinks active" id = "FP2" onclick = "tabClick('FP2')">FP2 Converter</button>
         <button class="tablinks" id = "mapping" onclick = "tabClick('mapping')">CODCO Mapping Generator</button>
     </div>
-    <script>
-        function tabClick(tab) {
-            var children = document.getElementById("topNav").children;
-            for (i in children) {
-                children[i].className = "tablinks"
-            }
-            var activeTab = document.getElementById(tab);
-            activeTab.className = "tablinks active";
-            if (tab == "FP2" ) {
-                document.getElementById("FP2_converter").style = "display:block"
-                document.getElementById("GOES_mapping").style = "display:none"
-            } else if (tab == "mapping") {
-                document.getElementById("FP2_converter").style = "display:none"               
-                document.getElementById("GOES_mapping").style = "display:block"
-                CODCOgenerateMapping()
-            }
-        }
-    </script>
-    
+    <!--FP2 Converter Tab html elements-->
     <div id="FP2_converter">
         <h1>FP2 GOES String Converter</h1>
         <p>This utility converts a GOES string to engineering units. The string can contain the DCS appeneded parentheses at the beginning; the script ignores them. Extra spaces before or after the string must be removed. If a GOES mapping string and header information is provided the utility will attempt to seperate the values into the channels and groups outlined by the mapping string.</p>
@@ -107,11 +90,12 @@
                     <option value="header">Header Used (multiple time steps per transmission)</option>
             </select>
             <br><br>
-            <button type="button" onclick="results(true)">Submit</button>
+            <button type="button" onclick="resultsFP2()">Submit</button>
         </form>
         <h3>GOES converted String Results:</h3>
         <div id="results"></div>    
     </div>
+    <!-- CODCO GOES Mapping HTML elements-->
     <div id = "GOES_mapping" style="display:none;">
         <h1>CODCO GOES Mapping Generator</h1>
         <form id="mappingForm">
@@ -120,7 +104,7 @@
             <input type="checkbox" id="Aux_Prec" value="1" onchange="CODCOgenerateMapping()"><br>
             <label for="vehicle1"> Auxiliary Pillow TXD</label>
             <input type="checkbox" id="Aux_Pillow" value="1" onchange="CODCOgenerateMapping()"><br>
-            <h3>Group 2 Extended Sensors</h3>
+            <h3>Group 2 Extended Sensors - Soils</h3>
             <select name="soils" id="soils" onchange="CODCOgenerateMapping()">
                 <option value="0" selected></option>
                 <option value="1">One soil sensor</option>
@@ -149,7 +133,24 @@
         <button onclick="toFP2()">Copy to FP2 Converter Tab</button>
     </div>
 
-    <script name="GOES mapping generator functions">
+    <script name="All JS functions">
+        //Function triggered by the top menu bar elements upon click. Defines which div section is displayed.
+        function tabClick(tab) {
+            var children = document.getElementById("topNav").children;
+            for (i in children) {
+                children[i].className = "tablinks"
+            }
+            var activeTab = document.getElementById(tab);
+            activeTab.className = "tablinks active";
+            if (tab == "FP2" ) {
+                document.getElementById("FP2_converter").style = "display:block"
+                document.getElementById("GOES_mapping").style = "display:none"
+            } else if (tab == "mapping") {
+                document.getElementById("FP2_converter").style = "display:none"               
+                document.getElementById("GOES_mapping").style = "display:block"
+                CODCOgenerateMapping()
+            }
+        }
         //function added to remove space in GOES string upon changes.
         function spaceRemover() {
             var mapText = document.getElementById("gstring").value 
@@ -164,7 +165,7 @@
         }
 
 
-
+        //Special function for CODCO mapping tab where RH temp is only displayed if RH is selected
         function rhPrams(){
             if (document.getElementById("RH").checked) {
                 document.getElementById("RH_Temp").style.display = "inline"
@@ -175,7 +176,7 @@
                 document.getElementById("RH_Temp").checked = false
             }
         }
-
+        //Special function for CODCO mapping tab where Snow_Depth_params are only displayed if group 16  Standard_Parameters is selected
         function group16params(){
             if (document.getElementById("Standard_Parameters").checked) {
                 document.getElementById("Snow_Depth_params").style.display = "inline"
@@ -186,12 +187,12 @@
                 document.getElementById("Snow_Depth_params").checked = false
             }
         }
-
+        //function to copy GOES mapping from CODCO tab to the String Converter Tab
         function printMapping(mapping) {
             var mapText = document.getElementById("goes_mapping_string")
             mapText.textContent = mapping
         }
-
+        //CODCO string mapping function. Generates a string mapping based on current CODCO program.
         function CODCOgenerateMapping() {
             group16params()
             rhPrams()
@@ -246,17 +247,12 @@
             } else {
                 g16String = ''
             }  
-            //compile
+            //compile. Concatenate all group strings to produce final string 
             finalString = g1String + g2String + g3String +g16String
             printMapping(finalString)
         }
-
-
-
-    </script>
     
-    <script name="GOES string conversion functions">
-
+    //function for bankers rounding
     function bankRound(num, decimalPlaces) {
         var d = decimalPlaces || 0;
         var m = Math.pow(10, d);
@@ -267,6 +263,7 @@
                     ((i % 2 == 0) ? i : i + 1) : Math.round(n);
         return d ? r / m : r;
     }
+    //clears all elements from the div 'results' tag
     function clearResults(){
         var res = document.getElementById("results")
         if (res.childElementCount > 0){
@@ -275,7 +272,7 @@
             }
         }
     }
-
+    // function to convert Campbell's FP2 to human readable values
     function convertString(){
         var gString = document.getElementById("gstring").value;
         if (gString[0] == "\"") {
@@ -314,27 +311,28 @@
                     DV = (DV + ((B & 63) * 64) + (C & 63)) * SF
                 }
                 if (!Number.isInteger(DV)){
-                    DV = bankRound(DV,1)
+                    DV = bankRound(DV,1) //if number is not an int round to 1 decimal place
                 }
-                vals.push(DV)
+                vals.push(DV) // push to array
             }
 
         };
         return vals
     }
 
-
+    // function for data using GOES header information to split array from converted FP2 string into appropriate groups
     function publish_header(valArray, selectTimeStep){
+        // function takes array from FP2 conversion and a time step "selectTimeStep" to convert data.
         var resDct = {}
         //goes mapping data and arrays
         var goesMapping = document.getElementById("gmapping").value
         var groupVals = goesMapping.split(";")
         //data to use
-        var header = valArray.slice(0,2);
-        var dataChannels = header[1];
-        resDct["Goes Header"] = header;
-        var channelsFromMapping = Number(groupVals[groupVals.length-1].split("..")[1]) - 1;
-        if ( channelsFromMapping != dataChannels) {
+        var header = valArray.slice(0,2); //goes header data is always first 2 values of array
+        var dataChannels = header[1]; //get number of channels logger things its telemetering in header data
+        resDct["Goes Header"] = header; 
+        var channelsFromMapping = Number(groupVals[groupVals.length-1].split("..")[1]) - 1; //extracts the number of channels expected from GOES Mapping string
+        if ( channelsFromMapping != dataChannels) { //throw error if mismach
             alert(`The number of channels calculated from the GOES mapping is ${channelsFromMapping} and the number of channels telemetered is ${dataChannels}. GOES string must match what is telemetered. Check that the correct mapping is used and that correct header version is selected. If still inconsistant, logger configuration may be wrong.`)
             throw("miss-mach GOES mapping confige")
         }
@@ -343,7 +341,7 @@
         var goesTime = dataAndTime.slice(0 + (2+dataChannels) * (selectTimeStep -1),0 + (2 + dataChannels) * (selectTimeStep -1) + 2);
         resDct["Goes Time Information"] = goesTime;
         var data = dataAndTime.slice(dataChannels * (selectTimeStep -1) + (2 * selectTimeStep), (dataChannels + 2 ) * selectTimeStep);
-        //create data dict for display
+        //create data dict for display. Dict contains all groups and arrays of data assigned to those groups
         for (let i in groupVals) {
             var groupArr = groupVals[i].split(",")
             var groupName = groupArr[0]
@@ -356,7 +354,7 @@
             }
             resDct['Group '+ groupName] = dataVals
         }
-        //dispay results
+        //dispay results by looping through dict
         var res = document.getElementById("results")
         for (tbl in resDct) {
             var displayName = document.createElement("h3");
@@ -407,7 +405,9 @@
         }
     }
 
+    //function to spit out data into groups when the Non-header version is selected.
     function publish_non_header(valArray) {
+        //functions only requires FP2 converted array (valArray).
         clearResults()
         var resDct = {}
         //goes mapping data and arrays
@@ -417,12 +417,13 @@
         var goesTime = valArray.slice(0,2);
         resDct["Goes Time Information"] = goesTime;
         var data = valArray.slice(2,valArray.length);
+        //Make sure number of channels defined in GOES mapping matches what is in valArray.
         var channelsFromMapping = Number(groupVals[groupVals.length-1].split("..")[1]) - 1;
         if ( channelsFromMapping != data.length) {
             alert(`The number of channels calculated from the GOES mapping is ${channelsFromMapping} and the number of channels telemetered is ${data.length}. GOES string must match what is telemetered. Check that the correct mapping is used and that correct header version is selected. If still inconsistant, logger configuration may be wrong.`)
             throw("miss-mach GOES mapping confige")
         }
-        //create data dict for display
+        //create data dict for display. Dict contains all groups and arrays of data assigned to those groups
         for (let i in groupVals) {
             var groupArr = groupVals[i].split(",")
             var groupName = groupArr[0]
@@ -481,7 +482,7 @@
     }
 
 
-
+    //function for printing the FP2 converted data array as a simple table when no mapping is used or there is an error in the publish_non_header or publish_header functions.
     function printGoesString(valArray) {
         clearResults()
         var res = document.getElementById("results")
@@ -512,7 +513,7 @@
         res.appendChild(title)
         res.appendChild(table)
     }   
-
+    //function to recalulate data when a different timestep is selected. Only used when publish_header function was successful.
     function reCal(){
         var valArray = convertString();
         var timeStep = Number(document.getElementById("transhour").value)
@@ -523,6 +524,7 @@
         publish_header(valArray, timeStep);
     }
 
+    //function to clear and populate the Multitranmission GOES timestep selection menu. Only used when publish_header was successful.
     function multiTransMenu (valArray, TimeStep) {
         clearResults()
         var res = document.getElementById("results")
@@ -547,7 +549,8 @@
         res.appendChild(transMenu);
     }
 
-    function results(){
+    //Meta function to convert FP2 string and display results given user selection and errors encountered.
+    function resultsFP2(){
         var valArray = convertString();
         var headRes = document.getElementById("headerversion").value
         var goesMapping = document.getElementById("gmapping").value
@@ -556,7 +559,7 @@
             throw("need to select a header version")
         }
         clearResults()
-        try {
+        try { //Try to use more complex FP2 string to mapping functions based on user impute. 
             
             if (goesMapping == ''){
                 clearResults()
@@ -571,13 +574,14 @@
                 }
 
             }
-        } catch {
+        } catch { //if error in above "try" statement, prints string as simple table using "printGoesString" function.
             try {
                 clearResults()
                 printGoesString(valArray)
                 alert("Error in GOES mapping. Results will be printed as a raw table of values.")
-            } catch {
+            } catch { //if issues in simple string conversion and display print alert and exit function.
                 alert("something wrong with GOES string. Make sure to remove any white spaces.")
+                throw("Error in printGoesString function. Likely error in copying string from GOES DCS website." )
             }
         }
     }
