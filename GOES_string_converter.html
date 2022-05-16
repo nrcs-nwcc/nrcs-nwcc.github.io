@@ -532,17 +532,19 @@
         transMenu.id = "transhour"
         var transLable = document.createElement("label")
         transLable.for="transhour"
-        transLable.textContent = "Choose hour to view:  "
+        transLable.textContent = "Choose hour (24-hour clock) to view: "
         var headRes = document.getElementById("headerversion").value
         var header = valArray.slice(0,2);
         var numOfTimeSteps = header[0];
         for (var i = 1; i<=Number(numOfTimeSteps); i++){
             var opt = document.createElement('option');
+            var dataAndTime = valArray.slice(2,valArray.length+1)
+            var goesTime = dataAndTime.slice(0 + (2+header[1]) * (i -1),0 + (2 + header[1]) * (i -1) + 2);
             opt.value = i;
+            opt.textContent = goesTime[1];
             if (i == TimeStep){
                 opt.selected;
             }
-            opt.innerHTML = i;
             transMenu.appendChild(opt);
         }
         res.appendChild(transLable);
