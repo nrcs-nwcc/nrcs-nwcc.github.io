@@ -91,8 +91,9 @@
             </select>
             <br><br>
             <button type="button" onclick="resultsFP2()">Submit</button>
+            <button type="button" onclick="clearResults()">Clear Results</button>
         </form>
-        <h3>GOES converted String Results:</h3>
+        <h2>GOES converted String Results:</h2>
         <div id="results"></div>    
     </div>
     <!-- CODCO GOES Mapping HTML elements-->
@@ -272,6 +273,33 @@
             }
         }
     }
+    //calculate julian day
+    function julianDay(){
+        var now = new Date();
+        var start = new Date(now.getFullYear(), 0, 0);
+        var diff = now - start;
+        var oneDay = 1000 * 60 * 60 * 24;
+        var day = Math.floor(diff / oneDay);
+        return day
+    }
+
+    //calculate Pacific Standared Time hour
+    function pstHour() {
+        var time = 8; //8 hours behind UTC time is PST
+        var currTime = new Date();
+        var d = new Date(currTime.getTime() - (time * 3600000));
+        var hours = d.getUTCHours();
+        return String(hours) + ":00"
+    }
+
+    //function that displays Julian day from start of year and Current hour of Portland Standard Time
+    function showTime(){
+        var txt = document.createElement("p")
+        txt.textContent = `Current relative Julian day is ${julianDay()} and current hour is ${pstHour()} in PST (24-hour clock).`
+        var results = document.getElementById("results")
+        results.appendChild(txt)
+    }
+
     // function to convert Campbell's FP2 to human readable values
     function convertString(){
         var gString = document.getElementById("gstring").value;
@@ -355,6 +383,7 @@
             resDct['Group '+ groupName] = dataVals
         }
         //dispay results by looping through dict
+        showTime()
         var res = document.getElementById("results")
         for (tbl in resDct) {
             var displayName = document.createElement("h3");
@@ -437,6 +466,7 @@
             resDct['Group '+ groupName] = dataVals
         }
         //dispay results
+        showTime()
         var res = document.getElementById("results")
         for (tbl in resDct) {
             var displayName = document.createElement("h3");
@@ -485,6 +515,7 @@
     //function for printing the FP2 converted data array as a simple table when no mapping is used or there is an error in the publish_non_header or publish_header functions.
     function printGoesString(valArray) {
         clearResults()
+        showTime()
         var res = document.getElementById("results")
         var title = document.createElement("h3")
         title.textContent = "Converted String:"
@@ -560,11 +591,9 @@
             alert("Select \"header\" or \"non header version\" to map values to groups.")
             throw("need to select a header version")
         }
-        clearResults()
         try { //Try to use more complex FP2 string to mapping functions based on user impute. 
             
             if (goesMapping == ''){
-                clearResults()
                 printGoesString(valArray)
             } else {
                 if (headRes == "header") {
@@ -578,7 +607,6 @@
             }
         } catch { //if error in above "try" statement, prints string as simple table using "printGoesString" function.
             try {
-                clearResults()
                 printGoesString(valArray)
                 alert("Error in GOES mapping. Results will be printed as a raw table of values.")
             } catch { //if issues in simple string conversion and display print alert and exit function.
