@@ -23,8 +23,11 @@
     <li>
       <a href="https://nrcs-nwcc.github.io/missing_norm_test.html">MISSING Normals Comp Test Page</a>
     </li>
-	<li>
+    <li>
       <a href="https://nrcs-nwcc.github.io/GOES_string_converter.html">GOES String Decoding Tool</a>
+    </li>
+    <li>
+      <a href="https://nrcs-nwcc.github.io/UserManual_NRCS_M4.html">M4 User Guide</a>
     </li>
   </ul>
 </html>
