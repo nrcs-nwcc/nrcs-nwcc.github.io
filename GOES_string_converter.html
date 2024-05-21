@@ -72,8 +72,8 @@
     <!--Top Navagation bar to toggle between GOES string converter and CODCO mapping calc-->
     <div class="tab" id="topNav">
         <button class="tablinks active" id = "FP2" onclick = "tabClick('FP2')">FP2 Converter</button>
-        <button class="tablinks" id = "mapping_new" onclick = "tabClick('mapping_new')">Colorado GOES Mapping AM16</button>
-        <button class="tablinks" id = "mapping_old" onclick = "tabClick('mapping_old')">Colorado GOES Mapping JUDD</button>    
+        <button class="tablinks" id = "mapping_am16" onclick = "tabClick('mapping_am16')">Colorado GOES Mapping AM16</button>
+        <button class="tablinks" id = "mapping_judd" onclick = "tabClick('mapping_judd')">Colorado GOES Mapping JUDD</button>    
     </div>
     <!--FP2 Converter Tab html elements-->
     <div id="FP2_converter">
@@ -97,17 +97,17 @@
         <h2>GOES converted String Results:</h2>
         <div id="results"></div>    
     </div>
-    <!-- CODCO Old GOES Mapping HTML elements-->
-    <div id = "GOES_mapping_old" style="display:none;">
-        <h1>CODCO GOES Mapping Generator for old JUDD Program</h1>
-        <form id="mappingForm_old">
+    <!-- CODCO judd GOES Mapping HTML elements-->
+    <div id = "GOES_mapping_judd" style="display:none;">
+        <h1>CODCO GOES Mapping Generator for judd JUDD Program</h1>
+        <form id="mappingForm_judd">
             <h3>Group 1 Extended Sensors</h3>
-            <label for="vehicle1"> Auxiliary Precipitation TXD</label>
-            <input type="checkbox" id="Aux_Prec" value="1" onchange="CODCOgenerateMapping_old()"><br>
-            <label for="vehicle1"> Auxiliary Pillow TXD</label>
-            <input type="checkbox" id="Aux_Pillow" value="1" onchange="CODCOgenerateMapping_old()"><br>
+            <label for="Aux_Prec_judd"> Auxiliary Precipitation TXD</label>
+            <input type="checkbox" id="Aux_Prec_judd" value="1" onchange="CODCOgenerateMapping_judd()"><br>
+            <label for="Aux_Pillow_judd"> Auxiliary Pillow TXD</label>
+            <input type="checkbox" id="Aux_Pillow_judd" value="1" onchange="CODCOgenerateMapping_judd()"><br>
             <h3>Group 2 Extended Sensors - Soils</h3>
-            <select name="soils" id="soils" onchange="CODCOgenerateMapping_old()">
+            <select name="soils_judd" id="soils_judd" onchange="CODCOgenerateMapping_judd()">
                 <option value="0" selected></option>
                 <option value="1">One soil sensor</option>
                 <option value="2">Two soil sensors</option>
@@ -116,44 +116,45 @@
                 <option value="5">Five soil sensors</option>
             </select>
             <h3>Group 3 Extended Sensors</h3>
-            <label for="wind"> Wind</label>
-            <input type="checkbox" id="wind" value="3" onchange="CODCOgenerateMapping_old()"><br>
+            <label for="wind_judd"> Wind</label>
+            <input type="checkbox" id="wind_judd" value="3" onchange="CODCOgenerateMapping_judd()"><br>
             <label for="solar"> Solar</label>
-            <input type="checkbox" id="solar" value="8" onchange="CODCOgenerateMapping_old()"><br>
-            <label for="RH"> RH</label>
-            <input type="checkbox" id="RH" value="4" onchange="CODCOgenerateMapping_old()"><br>
-            <label for="RH_Temp" id="RH_Temp_label" style="display:none"> RH Temp</label>
-            <input type="checkbox" id="RH_Temp" value="1" style="display:none" onchange="CODCOgenerateMapping_old()"><br>
+            <input type="checkbox" id="solar_judd" value="8" onchange="CODCOgenerateMapping_judd()"><br>
+            <label for="RH_judd_judd"> RH</label>
+            <input type="checkbox" id="RH_judd" value="4" onchange="CODCOgenerateMapping_judd()"><br>
+            <label for="RH_Temp_judd" id="RH_Temp_label_judd" style="display:none"> RH Temp</label>
+            <input type="checkbox" id="RH_Temp_judd" value="1" style="display:none" onchange="CODCOgenerateMapping_judd()"><br>
             <h3>Group 16 Diagnostic Parameter Options</h3>
-            <label for="Standard_Parameters"> Standard Diagnoistic Parameters</label>
-            <input type="checkbox" id="Standard_Parameters" checked value="6" onchange="CODCOgenerateMapping_old()"><br>
-            <label for="Snow_Depth_params" id="Snow_Depth_params_labels">Snow Depth Diagnostic Parameters</label>
-            <input type="checkbox" id="Snow_Depth_params" checked value="2" onchange="CODCOgenerateMapping_old()"><br>
+            <label for="Standard_Parameters_judd"> Standard Diagnoistic Parameters</label>
+            <input type="checkbox" id="Standard_Parameters_judd" checked value="6" onchange="CODCOgenerateMapping_judd()"><br>
+            <label for="Snow_Depth_params_judd" id="Snow_Depth_params_labels_judd">Snow Depth Diagnostic Parameters</label>
+            <input type="checkbox" id="Snow_Depth_params_judd" checked value="2" onchange="CODCOgenerateMapping_judd()"><br>
         </form>
         <h1>GOES Mapping Code:</h1>
-        <h3 id="goes_mapping_string_old"></h3>
-        <button onclick="toFP2('goes_mapping_string_old')">Copy to FP2 Converter Tab</button>
+        <h3 id="goes_mapping_string_judd"></h3>
+        <button onclick="toFP2('goes_mapping_string_judd')">Copy to FP2 Converter Tab</button>
     </div>
-    <!-- CODCO NEW GOES Mapping HTML elements-->
-    <div id = "GOES_mapping_new" style="display:none;">
+    <!-- CODCO am16 GOES Mapping HTML elements-->
+    <div id = "GOES_mapping_am16" style="display:none;">
         <h1>CODCO GOES Mapping Generator for 2024 AM16 Program</h1>
         <form id="mappingForm">
             <h3>Group 1 Primary Sensors</h3>
-            <label for="Pillow"> Pillow</label>
-            <input type="checkbox" checked id="Pillow" value="1" onchange="CODCOgenerateMapping()"><br>
-            <label for="Prec"> Precipitation</label>
-            <input type="checkbox" checked id="Prec" value="1" onchange="CODCOgenerateMapping()"><br>
-            <label for="Temp"> Temperature</label>
-            <input type="checkbox" checked id="Temp" value="4" onchange="CODCOgenerateMapping()"><br>
-            <label for="Snow-depth"> Snow Depth</label>
-            <input type="checkbox" checked id="Snow-depth" value="1" onchange="CODCOgenerateMapping()"><br>
-            <label for="Aux_Pillow"> Auxiliary Pillow TXD</label>
-            <input type="checkbox" id="Aux_Pillow" value="1" onchange="CODCOgenerateMapping()"><br>
-            <label for="Aux_Prec"> Auxiliary Precipitation TXD</label>
-            <input type="checkbox" id="Aux_Prec" value="1" onchange="CODCOgenerateMapping()"><br>
+            <label for="Pillow_am16"> Pillow</label>
+            <input type="checkbox" checked id="Pillow_am16" value="1" onchange="CODCOgenerateMapping()"><br>
+            <label for="Prec_am16"> Precipitation</label>
+            <input type="checkbox" checked id="Prec_am16" value="1" onchange="CODCOgenerateMapping()"><br>
+            <label for="Temp_am16"> Temperature</label>
+            <input type="checkbox" checked id="Temp_am16" value="4" onchange="CODCOgenerateMapping()"><br>
+            <label for="Snow-depth_am16"> Snow Depth</label>
+            <input type="checkbox" checked id="Snow-depth_am16" value="1" onchange="CODCOgenerateMapping()"><br>
+            <label for="Aux_Pillow_am16"> Auxiliary Pillow TXD</label>
+            <input type="checkbox" id="Aux_Pillow_am16" value="1" onchange="CODCOgenerateMapping()"><br>
+            <label for="Aux_Prec_am16"> Auxiliary Precipitation TXD</label>
+            <input type="checkbox" id="Aux_Prec_am16" value="1" onchange="CODCOgenerateMapping()"><br>
 
             <h3>Group 2 Soils</h3>
-            <select name="soils" id="soils" onchange="CODCOgenerateMapping()">
+            <label for="soils_am16"> Number of Probes</label>
+            <select name="soils" id="soils_am16" onchange="CODCOgenerateMapping()">
                 <option value="0" selected></option>
                 <option value="1">One soil sensor</option>
                 <option value="2">Two soil sensors</option>
@@ -162,32 +163,42 @@
                 <option value="5">Five soil sensors</option>
             </select>
             <h3>Group 3 Extended Sensors</h3>
-            <label for="wind"> Wind</label>
-            <input type="checkbox" id="wind" value="3" onchange="CODCOgenerateMapping()"><br>
-            <label for="solar"> Solar</label>
-            <input type="checkbox" id="solar" value="4" onchange="CODCOgenerateMapping()"><br>
-            <label for="RH"> RH and RH Temperature</label>
-            <input type="checkbox" id="RH" value="5" onchange="CODCOgenerateMapping()"><br>
+            <label for="wind_am16"> Wind</label>
+            <input type="checkbox" id="wind_am16" value="3" onchange="CODCOgenerateMapping()"><br>
+            <!-- <label for="solar_am16"> Solar</label>
+            <input type="checkbox" id="solar_am16" value="4" onchange="CODCOgenerateMapping()"><br> -->
+            <label for="solar_am16"> Solar</label>
+            <select name="solar" id="solar_am16" onchange="CODCOgenerateMapping()">
+                <option value="0" selected></option>
+                <option value="2">510/610</option>
+                <option value="4">SN500</option>
+            </select><br>
+            <!-- <label for="RH_am16"> RH and RH Temperature</label>
+            <input type="checkbox" id="RH_am16" value="5" onchange="CODCOgenerateMapping()"><br> -->
+            <label for="RH_am16"> RH</label>
+            <input type="checkbox" id="RH_am16" value="4" onchange="CODCOgenerateMapping()"><br>
+            <label for="RH_Temp_am16" id="RH_Temp_label_am16" style="display:none"> RH Temp</label>
+            <input type="checkbox" id="RH_Temp_am16" value="1" style="display:none" onchange="CODCOgenerateMapping()"><br>
 
             <h3>Group 4 BeadedStream Temperature Cable</h3>
-            <label for="beadedStream"> Beadedstream Snow Temperature</label>
-            <input type="checkbox" id="beadedStream" value="18" onchange="CODCOgenerateMapping()"><br>
+            <label for="beadedStream_am16"> Beadedstream Snow Temperature</label>
+            <input type="checkbox" id="beadedStream_am16" value="18" onchange="CODCOgenerateMapping()"><br>
 
             <h3>Group 5 Auxiliary Sensors</h3>
-            <label for="Aux-temp"> Auxiliary Temperature</label>
-            <input type="checkbox" id="Aux-temp" value="4" onchange="CODCOgenerateMapping()"><br>
-            <label for="Aux-snow-depth"> Auxiliary Snow Depth</label>
-            <input type="checkbox" id="Aux-snow-depth" value="1" onchange="CODCOgenerateMapping()"><br>
-            <label for="Tert-snow-depth"> Tertiary Snow Depth</label>
-            <input type="checkbox" id="Tert-snow-depth" value="1" onchange="CODCOgenerateMapping()"><br>
+            <label for="Aux-temp_am16"> Auxiliary Temperature</label>
+            <input type="checkbox" id="Aux-temp_am16" value="4" onchange="CODCOgenerateMapping()"><br>
+            <label for="Aux-snow-depth_am16"> Auxiliary Snow Depth</label>
+            <input type="checkbox" id="Aux-snow-depth_am16" value="1" onchange="CODCOgenerateMapping()"><br>
+            <label for="Tert-snow-depth_am16"> Tertiary Snow Depth</label>
+            <input type="checkbox" id="Tert-snow-depth_am16" value="1" onchange="CODCOgenerateMapping()"><br>
 
             <h3>Group 16 Diagnostic Parameter Options</h3>
-            <label for="Standard_Parameters"> Standard Diagnoistic Parameters</label>
-            <input type="checkbox" id="Standard_Parameters" checked value="5" onchange="CODCOgenerateMapping()"><br>
+            <label for="Standard_Parameters_am16"> Standard Diagnoistic Parameters</label>
+            <input type="checkbox" id="Standard_Parameters_am16" checked value="5" onchange="CODCOgenerateMapping()"><br>
         </form>
         <h1>GOES Mapping Code:</h1>
-        <h3 id="goes_mapping_string_new"></h3>
-        <button onclick="toFP2('goes_mapping_string_new')">Copy to FP2 Converter Tab</button>
+        <h3 id="goes_mapping_string_am16"></h3>
+        <button onclick="toFP2('goes_mapping_string_am16')">Copy to FP2 Converter Tab</button>
     </div>
     <script name="All JS functions">
         //Function triggered by the top menu bar elements upon click. Defines which div section is displayed.
@@ -200,17 +211,17 @@
             activeTab.className = "tablinks active";
             if (tab == "FP2" ) {
                 document.getElementById("FP2_converter").style = "display:block"
-                document.getElementById("GOES_mapping_new").style = "display:none"
-                document.getElementById("GOES_mapping_old").style = "display:none"
-            } else if (tab == "mapping_old") {
+                document.getElementById("GOES_mapping_am16").style = "display:none"
+                document.getElementById("GOES_mapping_judd").style = "display:none"
+            } else if (tab == "mapping_judd") {
                 document.getElementById("FP2_converter").style = "display:none"
-                document.getElementById("GOES_mapping_new").style  = "display:none"           
-                document.getElementById("GOES_mapping_old").style = "display:block"
-                CODCOgenerateMapping_old()
-            } else if (tab === "mapping_new") {
+                document.getElementById("GOES_mapping_am16").style  = "display:none"           
+                document.getElementById("GOES_mapping_judd").style = "display:block"
+                CODCOgenerateMapping_judd()
+            } else if (tab === "mapping_am16") {
                 document.getElementById("FP2_converter").style = "display:none"               
-                document.getElementById("GOES_mapping_old").style = "display:none"
-                document.getElementById("GOES_mapping_new").style = "display:block"
+                document.getElementById("GOES_mapping_judd").style = "display:none"
+                document.getElementById("GOES_mapping_am16").style = "display:block"
                 CODCOgenerateMapping()                
             }
         }
@@ -232,25 +243,36 @@
 
 
         //Special function for CODCO mapping tab where RH temp is only displayed if RH is selected
-        function rhPrams(){
-            if (document.getElementById("RH").checked) {
-                document.getElementById("RH_Temp").style.display = "inline"
-                document.getElementById("RH_Temp_label").style.display = "inline"
+        function rhPrams_Judd(){
+            if (document.getElementById("RH_judd").checked) {
+                document.getElementById("RH_Temp_judd").style.display = "inline"
+                document.getElementById("RH_Temp_label_judd").style.display = "inline"
             } else {
-                document.getElementById("RH_Temp").style.display = "none"
-                document.getElementById("RH_Temp_label").style.display = "none"
-                document.getElementById("RH_Temp").checked = false
+                document.getElementById("RH_Temp_judd").style.display = "none"
+                document.getElementById("RH_Temp_label_judd").style.display = "none"
+                document.getElementById("RH_Temp_judd").checked = false
+            }
+        }
+        function rhPrams_am16(){
+            if ((document.getElementById("RH_am16").checked) && (document.getElementById("RH_Temp_label_am16").style.display === 'none')) {
+                document.getElementById("RH_Temp_am16").checked = true
+                document.getElementById("RH_Temp_am16").style.display = "inline"
+                document.getElementById("RH_Temp_label_am16").style.display = "inline"
+            } else if (document.getElementById("RH_am16").checked === false) {
+                document.getElementById("RH_Temp_am16").style.display = "none"
+                document.getElementById("RH_Temp_label_am16").style.display = "none"
+                document.getElementById("RH_Temp_am16").checked = false
             }
         }
         //Special function for CODCO mapping tab where Snow_Depth_params are only displayed if group 16  Standard_Parameters is selected
-        function group16params(){
-            if (document.getElementById("Standard_Parameters").checked) {
-                document.getElementById("Snow_Depth_params").style.display = "inline"
-                document.getElementById("Snow_Depth_params_labels").style.display = "inline"
+        function group16params_Judd(){
+            if (document.getElementById("Standard_Parameters_judd").checked) {
+                document.getElementById("Snow_Depth_params_judd").style.display = "inline"
+                document.getElementById("Snow_Depth_params_labels_judd").style.display = "inline"
             } else {
-                document.getElementById("Snow_Depth_params").style.display = "none"
-                document.getElementById("Snow_Depth_params_labels").style.display = "none"
-                document.getElementById("Snow_Depth_params").checked = false
+                document.getElementById("Snow_Depth_params_judd").style.display = "none"
+                document.getElementById("Snow_Depth_params_labels_judd").style.display = "none"
+                document.getElementById("Snow_Depth_params_judd").checked = false
             }
         }
         //function to copy GOES mapping from CODCO tab to the String Converter Tab
@@ -259,11 +281,11 @@
             mapText.textContent = mapping
         }
         //CODCO string mapping function. Generates a string mapping based on current CODCO program.
-        function CODCOgenerateMapping_old() {
-            group16params()
-            rhPrams()
+        function CODCOgenerateMapping_judd() {
+            group16params_Judd()
+            rhPrams_Judd()
             //get form results
-            var formRes = document.getElementById("mappingForm_old").children
+            var formRes = document.getElementById("mappingForm_judd").children
             var resDct = {};
             for (let i = 0; i<formRes.length; ++i) {
                 if (formRes[i].tagName == "INPUT") {
@@ -281,11 +303,11 @@
             }
             //group 1
             g1Start = 2
-            g1end = 13+ resDct["Aux_Pillow"] + resDct["Aux_Prec"]
+            g1end = 13+ resDct["Aux_Pillow_judd"] + resDct["Aux_Prec_judd"]
             g1String = `1,${g1Start}..${g1end}`
             //group 2
             g2Start = g1end
-            g2end = g2Start + resDct["soils"] * 2
+            g2end = g2Start + resDct["soils_judd"] * 2
             if (g2end > g2Start) {
                 g2end
                 g2Start += 1
@@ -295,7 +317,7 @@
             }
             //group 3
             g3Start = g2end
-            g3end = g3Start + resDct["wind"] + resDct["solar"] + resDct["RH"] + resDct["RH_Temp"]
+            g3end = g3Start + resDct["wind_judd"] + resDct["solar_judd"] + resDct["RH_judd"] + resDct["RH_Temp_judd"]
             if (g3end > g3Start) {
                 g3end
                 g3Start += 1
@@ -305,7 +327,7 @@
             }           
             //group 16
             g16Start = g3end
-            g16end = g16Start + resDct["Snow_Depth_params"] + resDct["Standard_Parameters"]
+            g16end = g16Start + resDct["Snow_Depth_params_judd"] + resDct["Standard_Parameters_judd"]
             if (g16end > g16Start) {
                 g16end
                 g16Start += 1
@@ -315,9 +337,10 @@
             }  
             //compile. Concatenate all group strings to produce final string 
             finalString = g1String + g2String + g3String +g16String
-            printMapping(finalString, "goes_mapping_string_old")
+            printMapping(finalString, "goes_mapping_string_judd")
         }
         function CODCOgenerateMapping() {
+            rhPrams_am16()
             //get form results
             var formRes = document.getElementById("mappingForm").children
             var resDct = {};
@@ -337,11 +360,11 @@
             }
             //group 1
             g1Start = 2
-            g1end = g1Start + 4 + resDct["Pillow"] + resDct["Prec"] + resDct["Temp"] + resDct["Snow-depth"] + resDct["Aux_Pillow"] + resDct["Aux_Prec"]
+            g1end = g1Start + 4 + resDct["Pillow_am16"] + resDct["Prec_am16"] + resDct["Temp_am16"] + resDct["Snow-depth_am16"] + resDct["Aux_Pillow_am16"] + resDct["Aux_Prec_am16"]
             g1String = `1,${g1Start}..${g1end}`
             //group 2
             g2Start = g1end
-            g2end = g2Start + resDct["soils"] * 2
+            g2end = g2Start + resDct["soils_am16"] * 2
             if (g2end > g2Start) {
                 g2end
                 g2Start += 1
@@ -351,7 +374,7 @@
             }
             //group 3
             g3Start = g2end
-            g3end = g3Start + resDct["wind"] + resDct["solar"] + resDct["RH"]
+            g3end = g3Start + resDct["wind_am16"] + resDct["solar_am16"] + resDct["RH_am16"] +  resDct["RH_Temp_am16"]
             if (g3end > g3Start) {
                 g3end
                 g3Start += 1
@@ -362,7 +385,7 @@
 
             //group 4
             g4Start = g3end
-            g4end = g4Start + resDct["beadedStream"]
+            g4end = g4Start + resDct["beadedStream_am16"]
             if (g4end > g4Start) {
                 g4end
                 g4Start += 1
@@ -372,7 +395,7 @@
             }
             //group 5
             g5Start = g4end
-            g5end = g5Start + resDct["Aux-temp"] + resDct["Aux-snow-depth"] + resDct["Tert-snow-depth"]
+            g5end = g5Start + resDct["Aux-temp_am16"] + resDct["Aux-snow-depth_am16"] + resDct["Tert-snow-depth_am16"]
             if (g5end > g5Start) {
                 g5end
                 g5Start += 1
@@ -385,7 +408,7 @@
 
             //group 16
             g16Start = g5end
-            g16end = g16Start + resDct["Standard_Parameters"]
+            g16end = g16Start + resDct["Standard_Parameters_am16"]
             if (g16end > g16Start) {
                 g16end
                 g16Start += 1
@@ -395,7 +418,7 @@
             }  
             //compile. Concatenate all group strings to produce final string 
             finalString = g1String + g2String + g3String + g4String + g5String + g16String
-            printMapping(finalString, "goes_mapping_string_new")
+            printMapping(finalString, "goes_mapping_string_am16")
         }    
     //function for bankers rounding
     function bankRound(num, decimalPlaces) {
