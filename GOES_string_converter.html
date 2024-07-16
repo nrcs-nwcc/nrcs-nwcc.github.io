@@ -229,6 +229,8 @@
             <h3>Group 5 Auxiliary Sensors</h3>
             <label for="Aux-temp_am16"> Auxiliary Temperature</label>
             <input type="checkbox" id="Aux-temp_am16" value="4" onchange="CODCOgenerateMapping()"><br>
+            <label for="SuperSite_Temp_am16"> Super Site Hourly Temp (only for Super Sites)</label>
+            <input type="checkbox" id="SuperSite_Temp_am16" value="6" onchange="CODCOgenerateMapping()"><br>
             <label for="Aux-snow-depth_am16">Auxiliary Snow Depth</label>
             <select name="Aux-snow-depth" id="Aux-snow-depth_am16" onchange="CODCOgenerateMapping()">
                 <option value="0" selected></option>
@@ -456,7 +458,7 @@
             }
             //group 5
             g5Start = g4end
-            g5end = g5Start + resDct["Aux-temp_am16"] + resDct["Aux-snow-depth_am16"] + resDct["Tert-snow-depth_am16"]
+            g5end = g5Start + resDct["Aux-temp_am16"] + resDct["SuperSite_Temp_am16"] + resDct["Aux-snow-depth_am16"] + resDct["Tert-snow-depth_am16"]
             if (g5end > g5Start) {
                 g5end
                 g5Start += 1
@@ -683,8 +685,7 @@
             return Number(channel)
         } else {
             return 0
-        }
-        
+        }  
     }
 
     function beadedStream(table, bdsData) {
@@ -701,8 +702,12 @@
         return Number(18)
     }
 
+    function superSiteHourlyTempGenerator(table, rhData, channel, id ) {
+        console.log('this fired')
+    }
+
     function diagnosticParameters() {
-        const diagPrams = document.getElementById("mappingForm").children[51]
+        const diagPrams = document.getElementById("mappingForm").children[54]
         const number = Number(diagPrams.options[diagPrams.selectedIndex].value)
         const table = document.getElementById("sensor-management-16")
         if (number === 0) {
@@ -1158,6 +1163,7 @@
         RH_Temp_am16: ['RH Temp TOBS.I-2'],
         beadedStream_am16 : ['Snowpack temperature STEMP.I'],
         'Aux-temp_am16': ['Aux YSI air temp TOBS.I', 'Aux YSI air temp TMAX.D', 'Aux YSI air temp TMIN.D', 'Aux YSI air temp TAVG.D'],
+        'SuperSite_Temp_am16':['Air temp TMAX.H', 'Air temp TMIN.H', 'Air temp TAVG.H', 'RH Temp TMAX.H', 'RH Temp TMIN.H', 'RH Temp TAVG.H'],
         'Aux-snow-depth_am16': ['Aux Snow Depth SNWD.I'],
         'Tert-snow-depth_am16': ['Tert Snow Depth SNWD.I'],
         Standard_Parameters_am16_cell: ['Diag - Skipped Scans', 'Diag - Logger Watchdog Errors', 'Diag - Logger Temperature'],
@@ -1865,6 +1871,133 @@
         "Multiplier": 1,
         "Constant": 0,
         "Instrument": "Air Temp - YSI 44211A Corrected",
+        "Alt Instruments": "",
+        "Tert Instruments": "",
+        "Stack Number": null,
+        "Sampling Frequency": "1 minutes"
+        },
+        {
+        "Sensor": "Air temp TMAX.H",
+        "Label": "clear label",
+        "Ordinal": 1,
+        "Depth-Height": "",
+        "offset": "0",
+        "Force Suspect": "if data is good leave unchecked",
+        "Remark": "",
+        "Environmental Observation": "",
+        "Element": "air temperature",
+        "Function": "maximum for interval",
+        "Duration": "1 Hour",
+        "Data Units": "degree celsius",
+        "Multiplier": 1,
+        "Constant": 0,
+        "Instrument": "Air Temp - ST-300",
+        "Alt Instruments": "",
+        "Tert Instruments": "",
+        "Stack Number": null,
+        "Sampling Frequency": "1 minutes"
+        },
+        {
+        "Sensor": "Air temp TMIN.H",
+        "Label": "clear label",
+        "Ordinal": 1,
+        "Depth-Height": "",
+        "offset": "0",
+        "Force Suspect": "if data is good leave unchecked",
+        "Remark": "",
+        "Environmental Observation": "",
+        "Element": "air temperature",
+        "Function": "minimum for interval",
+        "Duration": "1 Hour",
+        "Data Units": "degree celsius",
+        "Multiplier": 1,
+        "Constant": 0,
+        "Instrument": "Air Temp - ST-300",
+        "Alt Instruments": "",
+        "Tert Instruments": "",
+        "Stack Number": null,
+        "Sampling Frequency": "1 minutes"
+        },
+        {
+        "Sensor": "Air temp TAVG.H",
+        "Label": "clear label",
+        "Ordinal": 1,
+        "Depth-Height": "",
+        "offset": "0",
+        "Force Suspect": "if data is good leave unchecked",
+        "Remark": "",
+        "Environmental Observation": "",
+        "Element": "air temperature",
+        "Function": "average for interval",
+        "Duration": "1 Hour",
+        "Data Units": "degree celsius",
+        "Multiplier": 1,
+        "Constant": 0,
+        "Instrument": "Air Temp - ST-300",
+        "Alt Instruments": "",
+        "Tert Instruments": "",
+        "Stack Number": null,
+        "Sampling Frequency": "1 minutes"
+        },
+        {
+        "Sensor": "RH Temp TMAX.H",
+        "Label": "clear label",
+        "Ordinal": 2,
+        "Depth-Height": "",
+        "offset": "0",
+        "Force Suspect": "if data is good leave unchecked",
+        "Remark": "",
+        "Environmental Observation": "",
+        "Element": "air temperature",
+        "Function": "maximum for interval",
+        "Duration": "1 Hour",
+        "Data Units": "degree celsius",
+        "Multiplier": 1,
+        "Constant": 0,
+        "Instrument": "Air Temp/RH Vaisala HMP155",
+        "Alt Instruments": "",
+        "Alt Instruments": "",
+        "Tert Instruments": "",
+        "Stack Number": null,
+        "Sampling Frequency": "1 minutes"
+        },
+        {
+        "Sensor": "RH Temp TMIN.H",
+        "Label": "clear label",
+        "Ordinal": 2,
+        "Depth-Height": "",
+        "offset": "0",
+        "Force Suspect": "if data is good leave unchecked",
+        "Remark": "",
+        "Environmental Observation": "",
+        "Element": "air temperature",
+        "Function": "minimum for interval",
+        "Duration": "1 Hour",
+        "Data Units": "degree celsius",
+        "Multiplier": 1,
+        "Constant": 0,
+        "Instrument": "Air Temp/RH Vaisala HMP155",
+        "Alt Instruments": "",
+        "Tert Instruments": "",
+        "Stack Number": null,
+        "Sampling Frequency": "1 minutes"
+        },
+        {
+        "Sensor": "RH Temp TAVG.H",
+        "Label": "clear label",
+        "Ordinal": 2,
+        "Depth-Height": "",
+        "offset": "0",
+        "Force Suspect": "if data is good leave unchecked",
+        "Remark": "",
+        "Environmental Observation": "",
+        "Element": "air temperature",
+        "Function": "average for interval",
+        "Duration": "1 Hour",
+        "Data Units": "degree celsius",
+        "Multiplier": 1,
+        "Constant": 0,
+        "Instrument": "Air Temp/RH Vaisala HMP155",
         "Alt Instruments": "",
         "Tert Instruments": "",
         "Stack Number": null,
