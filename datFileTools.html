@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKCSURBVHjaYmSoP8KAAxgD8W4g5gTiaCBeh00RQAAxMfxnwmVAGRALAjEHlM2JqYSRASCAmBjYvjNgMcQLiMOA+CQQ7wNicyBORlHxn5GBgfkPA0AAMTGIPYZwEABkYwOUXQLESUD8BYgrgVgKYQDQUqHnDAABxMTA/xrouK/IrsgGYlMgXgjEoAB6CMQ9UM1FcNtZ/jAwCLxmAAggJgbmvwwM3B8ZGP6BDdAG4mYgBsoyTEFy1RwgBtrEkAbEOmDLeN4D3fqVASCAINYCncLA8htkch40sEAaziAZ8BTqCl4gnsTA+B8YvC9BTmEACCAmoM1cDJyf2Rn43/AATfZFshEdgLz0FqjGDqhejYHnAyNIL0AAgVywDWjiFQa2H0pAF7AB+UCnMLzHYsBnIP4G1MTIwPtemIH5935gNO4ACCAmsN/+M6owsH+TYWD6dxrIZwVifywGuAKxLNCyewxsP78BNVuD/AAQQCADtoIDhfe9JdCQpQz/mEGK24A4HEmzHRDPAKtj/jMNGIC6QJewAMWOAwQQEzih/Gf8CJRIBaaJ0wxMfycCDQGmBcYl0IR0GMjeDhSTALIXMIg+mcnA+jMbmnZ2AAQQM0Oo60dIkmb0Y+D6rM/A86mW4RfnYYbf7AoMf1mMgbaCnH0XmFbqGKTuzmcQeTYdKAbyDsiCfoAAYoE6sQscv/+YI4Fp4gyD4qVehm98WQxf+T+DZTk/szFwfbJnYP19mOEvMyhBnYAlKoAAYmRY1QXzJygGaoC4AJhHeBkYgQmM8f9bIP8v0HXCQFuZgTQwyTIsAuI6IH4D0gQQQMgGwADIr6FA7AzEMmA1kFR4FIiXA/EdZMUAAQYAXiGmmUcB80QAAAAASUVORK5CYII=">
+        <title>Dat File Preprocessing Tool</title>
+        <script src="./debiasTempDataInDat.js"></script>
+    </head>
+    <body>
+        <h1>Dat (.dat) File Preprocessing Tool</h1>
+        <p>The dat file preprocessing tool can be used to fix the timestep of a dat file, debias the temperature data, and replace NAN strings ("NAN") with an invalid number for uploading via SNOTEL Storage Console.</p>
+        <text>Load dat file (.dat):</text>
+        <input type="file" id="fileInput" accept=".dat"/>
+        <div id="debias-menu"></div>
+        <div id="datetime-menu" style='display:None'>
+            <h3>Fix .dat File Datetime Index:</h3>
+            <form id="datetime-form">
+                <label for="start-time-to-edit">Select First Date to Apply Offset: </label>
+                <select id="start-time-to-edit"></select>
+                <br>
+                <label for="end-time-to-edit">Select Last Date to Apply Offset: </label>
+                <select id="end-time-to-edit"></select>
+                <br>
+                <label for="hour-diff">Hours to offset time by (+ adds hours/- subtracts hours): </label>
+                <input id="hour-diff" type="number"></input>
+                <br>
+                <text> ---- alternative: </text>
+                <label for="new-start-date">New start date and time (yyyy-mm-dd hh:mm:ss) for range selected: </label>
+                <input id="new-start-date" type="text"></input>
+                <br>
+                <button type="submit">Change Time</button>
+            </form>
+        </div>
+        <div id="nan-section" style="display:None">
+            <h3><bold>Replace NaN with Invalid Number:</bold></h3>
+            <P>As of 8/28/2024 the SNOTEL Storage Console cannot process NaN strings in the .dat file.</P>
+            <form>
+                <label for="remove-nans">Replace NaNs with -8190:</label>
+                <input type="checkbox" id="remove-nans"></input>
+            </form>
+        </div>
+        <div id="preview" style='display:None'>
+            <h2>Preview of .dat file:</h2>
+            <button id="saveButton" disabled>Save Updated File</button> <!-- save button setup -->
+            <pre id="output" aria-label=".dat file output after conversion"></pre> 
+        </div>
+    </body>
+</html>
