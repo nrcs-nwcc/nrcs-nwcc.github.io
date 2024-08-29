@@ -126,7 +126,9 @@ function dataTimeIndexAdjustmentMenu(data) {
     document.getElementById('datetime-menu').style['display'] = 'block'
 }
 
-function dataTimeProcessing(rows, datetimeIdxSet) {
+function dataTimeProcessing(rows, data) {
+    const datetimeIdxSet = data.timeIndexSettings
+    console.log()
     if (datetimeIdxSet) {
         if ((datetimeIdxSet['hour-diff'] === '') && (datetimeIdxSet['new-start-date'] === '')) {
             window.alert('Must enter hours (+/-) to offset selected range of the datetime index or define a new start date for the selected datetime index range. \nResetting datetime index')
@@ -138,11 +140,11 @@ function dataTimeProcessing(rows, datetimeIdxSet) {
             const timeIndexString = dataRows.map(item => item.split(',')[0].replace(/[(")]/g, ''))
             const filteredIdxString = timeIndexString.filter(( _, index) => ((Number(datetimeIdxSet['start-time-to-edit']) <= index ) && (Number(datetimeIdxSet['end-time-to-edit']) >= index)))
             const timeIndexArray = filteredIdxString.map(item => stringToTimeArray(item))
-            let hourDiff
+            let hourDiff = 0
             if (datetimeIdxSet['hour-diff'] !== '') {
                 hourDiff = Number(datetimeIdxSet['hour-diff'])
             } else if (datetimeIdxSet['new-start-date'] !== '') {
-                if (!dateTimeFormatCheck(datetimeIdxSet['new-start-date'])) { return rows}
+                if (!dateTimeFormatCheck(data)) { return rows}
                 const startTimeToEdit = timeIndexString[Number(datetimeIdxSet['start-time-to-edit'])]
                 hourDiff = getDifferenceFromNewStartDateAndOld(startTimeToEdit ,datetimeIdxSet['new-start-date'])
             }
@@ -169,7 +171,8 @@ function dataTimeProcessing(rows, datetimeIdxSet) {
     return rows
 }
 
-function dateTimeFormatCheck (dateTime) {
+function dateTimeFormatCheck (data) {
+    const dateTime = data.timeIndexSettings['new-start-date']
     let results = true
     try {
         let checkFail
@@ -192,6 +195,7 @@ function dateTimeFormatCheck (dateTime) {
     } catch (error) {
         alert(`Datetime formate submitted is improper. Must be formated "YYYY-MM-DD HH:MM:SS". "HH:MM:SS" are optional. The year must not exceed the current year. ${error}`)
         results = false
+        data.timeIndexSettings = undefined
     }
     return results
 }
@@ -280,7 +284,7 @@ function printDatFile(data, enable = true) {
     document.getElementById('preview').style.display = "block"
     let rows = data.rawFile.split('\n')
     rows = debiasProcessing(rows) // process temp debiasing
-    rows = dataTimeProcessing(rows, data.timeIndexSettings)     // process timestamp ajustments
+    rows = dataTimeProcessing(rows, data)     // process timestamp ajustments
     rows = nanReplacer(rows)     // replace nans 
     const updatedText = rows.join('\n')  
     data.processedFile = updatedText
