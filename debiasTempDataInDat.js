@@ -65,11 +65,17 @@ function debiasProcessing(rows) {
 
 ///////////////// timestamp functions
 
+function diffHours(dt1, dt2) {
+    const diff = (dt2.getTime() - dt1.getTime()) / (1000 * 60 * 60)
+  return Math.abs(Math.round(diff))
+ }
+
 function dataTimeIndexAdjustmentMenu(data) {
     // get array of date strings
     const rows = data.rawFile.split('\n')
     const dataRows = rows.filter((item,idx) => (idx > 3) && (item !== ""))
     const timeIndex = dataRows.map(item => item.split(',')[0].replace(/[(")]/g, ''))
+    const timeString = timeIndex.join(',')  
     // select start date
     const selectStart = document.getElementById('start-time-to-edit')
     selectStart.innerHTML = ''
@@ -77,6 +83,18 @@ function dataTimeIndexAdjustmentMenu(data) {
         option = document.createElement('option')
         option.value = idx
         option.textContent = item
+        const reExpres = new RegExp(String.raw`${item}`, "g")
+        let highlight = (timeString.match(reExpres) || []).length > 1 
+        if (idx > 0) {
+            const before = new Date(timeIndex[idx-1])
+            const current = new Date(item)
+            const hours = diffHours(before, current)
+            console.log(hours)
+            highlight  = hours > 1 ? true : highlight
+        } 
+        if (highlight) {
+            option.style.backgroundColor = "yellow"
+        }
         selectStart.appendChild(option)
     })
     // select end date
