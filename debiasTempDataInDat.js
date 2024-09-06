@@ -144,7 +144,6 @@ function dataTimeIndexAdjustmentMenu(data) {
 
 function dataTimeProcessing(rows, data) {
     const datetimeIdxSet = data.timeIndexSettings
-    console.log()
     if (datetimeIdxSet) {
         if ((datetimeIdxSet['hour-diff'] === '') && (datetimeIdxSet['new-start-date'] === '')) {
             window.alert('Must enter hours (+/-) to offset selected range of the datetime index or define a new start date for the selected datetime index range. \nResetting datetime index')
