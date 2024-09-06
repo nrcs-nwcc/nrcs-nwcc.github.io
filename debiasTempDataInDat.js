@@ -78,6 +78,8 @@ function dataTimeIndexAdjustmentMenu(data) {
     const timeString = timeIndex.join(',')  
     // select start date
     const selectStart = document.getElementById('start-time-to-edit')
+    const selectEnd = document.getElementById('end-time-to-edit')
+    selectEnd.innerHTML = ''
     selectStart.innerHTML = ''
     timeIndex.forEach((item,idx) => {
         option = document.createElement('option')
@@ -89,26 +91,22 @@ function dataTimeIndexAdjustmentMenu(data) {
             const before = new Date(timeIndex[idx-1])
             const current = new Date(item)
             const hours = diffHours(before, current)
-            console.log(hours)
+            if (hours > 1) {
+                document.querySelectorAll(`#datetime-form option[value="${idx-1}"]`).forEach(i => { i.style.backgroundColor = "yellow"})
+            }
             highlight  = hours > 1 ? true : highlight
         } 
         if (highlight) {
             option.style.backgroundColor = "yellow"
         }
         selectStart.appendChild(option)
-    })
-    // select end date
-    const selectEnd = document.getElementById('end-time-to-edit')
-    selectEnd.innerHTML = ''
-    timeIndex.forEach((item,idx) => {
-        option = document.createElement('option')
-        option.value = idx
-        option.textContent = item
+        const endOption = option.cloneNode(true)
         if (timeIndex.length - 1 === idx) {
-            option.selected = true
+            endOption.selected = true
         }
-        selectEnd.appendChild(option)
+        selectEnd.appendChild(endOption)
     })
+
     document.getElementById('hour-diff').addEventListener('change', () => {
         if (document.getElementById('hour-diff').value !== '') {
             document.getElementById('new-start-date').disabled = true
