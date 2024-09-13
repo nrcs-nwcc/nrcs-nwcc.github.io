@@ -54,8 +54,7 @@ function debiasProcessing(rows) {
                 if (columns[index]) {
                     const temperature = parseFloat(columns[index])
                     let debiasedValue = temperature >= -55 && temperature <= 60 ? TempDebias(temperature) : temperature
-                    columns[index] = debiasedValue ? String(debiasedValue.toPrecision(4)) : '"NAN"' // SNOTEL Storage expects a "NAN" with quotes.
-                    // returned as float because that seemed to work best..
+                    columns[index] = debiasedValue ? String(debiasedValue.toPrecision(4)) : '"NAN"' 
                 }
             })
         }
@@ -174,10 +173,6 @@ function dataTimeIndexAdjustmentMenu(data) {
 async function growler() {
     const growl = document.getElementsByClassName('growler-off')[0]
     growl.classList.add('growler-on')
-    // setTimeout(() => {
-    //     // Code to execute after 10 seconds
-    //     growl.classList.remove('growler-on')
-    //   }, 10000)
 }
 
 function dataTimeProcessing(rows, data, updateTimeIndex = false) {
@@ -381,7 +376,7 @@ function downloadData(data) {
 
 ///////////////////////// application entry point.
 window.onload = () => {
-    window.data = {
+    data = {
         rawFileName:'',
         rawFile:'',
         processedFile:''
