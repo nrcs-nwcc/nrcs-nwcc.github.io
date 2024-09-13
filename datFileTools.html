@@ -7,6 +7,16 @@
         <title>Dat File Preprocessing Tool</title>
         <script src="./debiasTempDataInDat.js"></script>
     </head>
+    <style>
+        .growler-off {
+            display: none;
+            background-color: yellow;
+            border: solid; 
+        }
+        .growler-on {
+            display: block;
+        }
+    </style>
     <body>
         <h1>Dat (.dat) File Preprocessing Tool</h1>
         <p>The dat file preprocessing tool can be used to fix the timestep of a dat file, debias YSI temperature data, and replace NAN strings ("NAN") with an invalid number for uploading via SNOTEL Storage Console.</p>
@@ -15,6 +25,8 @@
         <div id="debias-menu"></div>
         <div id="datetime-menu" style='display:None'>
             <h3>Fix .dat File Datetime Index:</h3>
+            <p>You can apply multiple changes to the datetime of a .dat file by clicking the submit with different settings multiple times.</p>
+            <h4 class="growler-off">Datetime Change Applied - click the "Reset Datetime" button to revert to original</h4>
             <form id="datetime-form">
                 <label for="start-time-to-edit">Select First Date to Apply Offset (Skipped hours and duplicates are highlighted): </label>
                 <select id="start-time-to-edit"></select>
@@ -29,7 +41,8 @@
                 <label for="new-start-date">New start date and time (yyyy-mm-dd hh:mm:ss) for range selected: </label>
                 <input id="new-start-date" type="text"></input>
                 <br>
-                <button type="submit">Change Time</button>
+                <button type="submit" id="submit-changes">Change Datetime</button>
+                <button type="reset" id="clear-changes">Reset Datetime</button>
             </form>
         </div>
         <div id="nan-section" style="display:None">

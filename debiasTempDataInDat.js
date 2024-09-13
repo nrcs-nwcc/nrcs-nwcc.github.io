@@ -72,9 +72,17 @@ function diffHours(dt1, dt2) {
 
 function dataTimeIndexAdjustmentMenu(data) {
     // get array of date strings
-    const rows = data.rawFile.split('\n')
-    const dataRows = rows.filter((item,idx) => (idx > 3) && (item !== ""))
-    const timeIndex = dataRows.map(item => item.split(',')[0].replace(/[(")]/g, ''))
+    let timeIndex
+    if (!data.processedTimeStep) {
+        const rows = data.rawFile.split('\n')
+        const dataRows = rows.filter((item,idx) => (idx > 3) && (item !== ""))
+        timeIndex = dataRows.map(item => item.split(',')[0].replace(/[(")]/g, ''))
+    } else {
+        const timeIdx = data.processedTimeStep
+        timeIndex = timeIdx.filter(item => item !== "")
+    }
+    
+
     const timeString = timeIndex.join(',')  
     // select start date
     const selectStart = document.getElementById('start-time-to-edit')
@@ -106,23 +114,22 @@ function dataTimeIndexAdjustmentMenu(data) {
         }
         selectEnd.appendChild(endOption)
     })
-
-    document.getElementById('hour-diff').addEventListener('change', () => {
-        if (document.getElementById('hour-diff').value !== '') {
-            document.getElementById('new-start-date').disabled = true
-        }  else {
-            document.getElementById('new-start-date').disabled = false
-        }
-    })
-    document.getElementById('new-start-date').addEventListener('change', () => {
-        if (document.getElementById('new-start-date').value !== '') {
-            document.getElementById('hour-diff').disabled = true
-        }  else {
-            document.getElementById('hour-diff').disabled = false
-        }
-    })
     const form = document.getElementById('datetime-form')
     if (!form.getAttribute('submit-event-attached')) {
+        document.getElementById('hour-diff').addEventListener('change', () => {
+            if (document.getElementById('hour-diff').value !== '') {
+                document.getElementById('new-start-date').disabled = true
+            }  else {
+                document.getElementById('new-start-date').disabled = false
+            }
+        })
+        document.getElementById('new-start-date').addEventListener('change', () => {
+            if (document.getElementById('new-start-date').value !== '') {
+                document.getElementById('hour-diff').disabled = true
+            }  else {
+                document.getElementById('hour-diff').disabled = false
+            }
+        })
         form.addEventListener('submit', (event) => {
             event.preventDefault(); // Prevents the default form submission
             const form = document.getElementById('datetime-form')
@@ -134,7 +141,29 @@ function dataTimeIndexAdjustmentMenu(data) {
                     dateTimeFormRes[item.id] = item.value
                 }
             })
-            data.timeIndexSettings = dateTimeFormRes
+            if ((dateTimeFormRes['hour-diff'] === '') && (dateTimeFormRes['new-start-date'] === '')) {
+                window.alert('Must enter hours (+/-) to offset selected range of the datetime index or define a new start date for the selected datetime index range. \nResetting datetime index')
+            } else {
+                data.timeIndexSettings = dateTimeFormRes
+                printDatFile(data,true)
+                document.getElementById('hour-diff').value = ''
+                document.getElementById('hour-diff').disabled = false
+                document.getElementById('new-start-date').value = ''
+                document.getElementById('new-start-date').disabled = false
+                dataTimeIndexAdjustmentMenu(data)
+                growler()
+            }
+        })
+        form.addEventListener('reset', (event) => {
+            event.preventDefault()
+            data.processedTimeStep = undefined
+            data.timeIndexSettings = undefined
+            document.getElementById('hour-diff').value = ''
+            document.getElementById('hour-diff').disabled = false
+            document.getElementById('new-start-date').value = ''
+            document.getElementById('new-start-date').disabled = false
+            document.getElementsByClassName('growler-off')[0].classList.remove('growler-on')
+            dataTimeIndexAdjustmentMenu(data)
             printDatFile(data,true)
         })
         form.setAttribute('submit-event-attached', true)
@@ -142,19 +171,32 @@ function dataTimeIndexAdjustmentMenu(data) {
     document.getElementById('datetime-menu').style['display'] = 'block'
 }
 
-function dataTimeProcessing(rows, data) {
-    const datetimeIdxSet = data.timeIndexSettings
-    if (datetimeIdxSet) {
-        if ((datetimeIdxSet['hour-diff'] === '') && (datetimeIdxSet['new-start-date'] === '')) {
-            window.alert('Must enter hours (+/-) to offset selected range of the datetime index or define a new start date for the selected datetime index range. \nResetting datetime index')
-            return rows
+async function growler() {
+    const growl = document.getElementsByClassName('growler-off')[0]
+    growl.classList.add('growler-on')
+    // setTimeout(() => {
+    //     // Code to execute after 10 seconds
+    //     growl.classList.remove('growler-on')
+    //   }, 10000)
+}
+
+function dataTimeProcessing(rows, data, updateTimeIndex = false) {
+    let combineWithOld
+    const headers = rows.slice(0,4)
+    const dataRows = rows.slice(4)
+    if (updateTimeIndex) {
+        const datetimeIdxSet = data.timeIndexSettings 
+        // get index
+        let timeIndexString
+        if (!data.processedTimeStep) {
+            timeIndexString = dataRows.map(item => item.split(',')[0].replace(/[(")]/g, ''))
         } else {
-            // get index
-            const headers = rows.slice(0,4)
-            const dataRows = rows.slice(4)//rows.filter((item,idx) => (idx > 3) && (item !== ""))
-            const timeIndexString = dataRows.map(item => item.split(',')[0].replace(/[(")]/g, ''))
+            timeIndexString = data.processedTimeStep
+        }
+        if (datetimeIdxSet) {
             const filteredIdxString = timeIndexString.filter(( _, index) => ((Number(datetimeIdxSet['start-time-to-edit']) <= index ) && (Number(datetimeIdxSet['end-time-to-edit']) >= index)))
             const timeIndexArray = filteredIdxString.map(item => stringToTimeArray(item))
+    
             let hourDiff = 0
             if (datetimeIdxSet['hour-diff'] !== '') {
                 hourDiff = Number(datetimeIdxSet['hour-diff'])
@@ -164,24 +206,38 @@ function dataTimeProcessing(rows, data) {
                 hourDiff = getDifferenceFromNewStartDateAndOld(startTimeToEdit ,datetimeIdxSet['new-start-date'])
             }
             const newIndex = timeIndexArray.map( item => dateTimeOffsetFunc(item, hourDiff))
-            const combineWithOld = timeIndexString.map((timeStamp,index) => {
+            combineWithOld = timeIndexString.map((timeStamp,index) => {
                 if ((Number(datetimeIdxSet['start-time-to-edit']) <= index ) && (Number(datetimeIdxSet['end-time-to-edit']) >= index)) {
                     return newIndex[index - Number(datetimeIdxSet['start-time-to-edit'])]
                 } else {
                     return timeStamp
                 }
             })
-            
-            rows = headers.concat(dataRows.map((item, index) => {
-                const data = item.split(',').slice(1).join(',') 
-                if (combineWithOld[index].length > 0) {
-                    return `"${combineWithOld[index]}",${data}`
-                } else {
-                    return ''
-                }
-                
-            }))
+        } else {
+            combineWithOld = timeIndexString
         }
+
+        data.processedTimeStep = combineWithOld
+        rows = headers.concat(dataRows.map((item, index) => {
+            const data = item.split(',').slice(1).join(',') 
+            if (combineWithOld[index].length > 0) {
+                return `"${combineWithOld[index]}",${data}`
+            } else {
+                return ''
+            }
+            
+        }))
+    } else if (data.processedTimeStep){
+        combineWithOld = data.processedTimeStep
+        rows = headers.concat(dataRows.map((item, index) => {
+            const data = item.split(',').slice(1).join(',') 
+            if (combineWithOld[index].length > 0) {
+                return `"${combineWithOld[index]}",${data}`
+            } else {
+                return ''
+            }
+            
+        }))
     }
     return rows
 }
@@ -281,13 +337,14 @@ function loadDatFile(event, data) {
         reader.onload = (evt) => {
             document.getElementById('output').textContent = '' //clear preview when uploading new file
             document.getElementById('saveButton').disabled = true
+            document.getElementById('remove-nans').checked = false
             data.timeIndexSettings = undefined
             data.rawFileName = file.name.split('.')[0]
             data.rawFile = evt.target.result
             debiasMenu(evt.target.result)
             dataTimeIndexAdjustmentMenu(data)
             nanSectionSetup(data)
-            printDatFile(data, false)
+            printDatFile(data)
             document.querySelector('#debias-menu form').removeEventListener('change', () => { printDatFile(data) })
             document.querySelector('#debias-menu form').addEventListener('change', () => { printDatFile(data) })
         }
@@ -295,16 +352,16 @@ function loadDatFile(event, data) {
     }
 }
 
-function printDatFile(data, enable = true) {
+function printDatFile(data, updateDateTime = false) {
     document.getElementById('preview').style.display = "block"
     let rows = data.rawFile.split('\n')
     rows = debiasProcessing(rows) // process temp debiasing
-    rows = dataTimeProcessing(rows, data)     // process timestamp ajustments
+    rows = dataTimeProcessing(rows, data, updateDateTime)     // process timestamp ajustments
     rows = nanReplacer(rows)     // replace nans 
     const updatedText = rows.join('\n')  
     data.processedFile = updatedText
     document.getElementById('output').textContent = updatedText
-    document.getElementById('saveButton').disabled = !enable
+    document.getElementById('saveButton').disabled = false
 }
 
 function downloadData(data) {
@@ -324,7 +381,7 @@ function downloadData(data) {
 
 ///////////////////////// application entry point.
 window.onload = () => {
-    const data = {
+    window.data = {
         rawFileName:'',
         rawFile:'',
         processedFile:''
