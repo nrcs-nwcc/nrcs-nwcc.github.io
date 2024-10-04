@@ -223,7 +223,7 @@
             <input type="checkbox" id="RH_Temp_am16" value="1" style="display:none" onchange="CODCOgenerateMapping()"><br>
 
             <h3>Group 4 BeadedStream Temperature Cable</h3>
-            <label for="beadedStream_am16"> Beadedstream Snow Temperature</label>
+            <label for="beadedStream_am16"> Beadedstream Profile Temperature</label>
             <input type="checkbox" id="beadedStream_am16" value="18" onchange="CODCOgenerateMapping()"><br>
 
             <h3>Group 5 Auxiliary Sensors</h3>
@@ -1161,7 +1161,7 @@
         'solar_am16': ['Solar Rad incoming SW SWINV.H', 'Solar Rad reflected SW SWOTV.H', 'Solar Rad incoming LW LWINV.H', 'Solar Rad reflected LW LWOTV.H'],
         RH_am16: ['RH instantainous RHUM.I','RH max RHUMX.H', 'RH min RHUMN.H', 'RH avg RHUMV.H'],
         RH_Temp_am16: ['RH Temp TOBS.I-2'],
-        beadedStream_am16 : ['Snowpack temperature STEMP.I'],
+        beadedStream_am16 : ['Profile temperature PTEMP.I'],
         'Aux-temp_am16': ['Aux YSI air temp TOBS.I', 'Aux YSI air temp TMAX.D', 'Aux YSI air temp TMIN.D', 'Aux YSI air temp TAVG.D'],
         'SuperSite_Temp_am16':['Air temp TMAX.H', 'Air temp TMIN.H', 'Air temp TAVG.H', 'RH Temp TMAX.H', 'RH Temp TMIN.H', 'RH Temp TAVG.H'],
         'Aux-snow-depth_am16': ['Aux Snow Depth SNWD.I'],
@@ -1772,7 +1772,7 @@
         "Sampling Frequency": "1 minutes"
         },
         {
-        "Sensor": "Snowpack temperature STEMP.I",
+        "Sensor": "Profile temperature PTEMP.I",
         "Label": "clear label",
         "Ordinal": 1,
         "Depth-Height": "use dropdown to add sensor height/depth",
@@ -1780,7 +1780,7 @@
         "Force Suspect": "if data is good leave unchecked",
         "Remark": "",
         "Environmental Observation": "",
-        "Element": "snow temperature",
+        "Element": "profile temperature",
         "Function": "current observation",
         "Duration": "instantaneous",
         "Data Units": "degree celsius",
