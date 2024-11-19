@@ -316,9 +316,10 @@ function nanSectionSetup(data) {
     }
 }
 
-function nanReplacer(rows){
+function nanAndInfReplacer(rows){
     if (document.getElementById('remove-nans').checked) {
         rows = rows.map(i => i.replaceAll(",\"NAN\"", ",-8190"))
+        rows = rows.map(p => p.replaceAll(",\"INF\"", ",-8190")) //*PS inf replacement
     }
     return rows
 }
@@ -352,7 +353,7 @@ function printDatFile(data, updateDateTime = false) {
     let rows = data.rawFile.split('\n')
     rows = debiasProcessing(rows) // process temp debiasing
     rows = dataTimeProcessing(rows, data, updateDateTime)     // process timestamp ajustments
-    rows = nanReplacer(rows)     // replace nans 
+    rows = nanAndInfReplacer(rows)     // replace nans 
     const updatedText = rows.join('\n')  
     data.processedFile = updatedText
     document.getElementById('output').textContent = updatedText
