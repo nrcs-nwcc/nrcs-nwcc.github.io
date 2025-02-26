@@ -1,5 +1,5 @@
 <html>
-
+  <body>
   <h3>Links:  </h3>
   <ul>
     <li>
@@ -13,5 +13,6 @@
     </li>
   </ul>
   NWCC Coding style VSCode profile:
+  </body>
   <script src="https://gist.github.com/beautah/8aec4c3360e225c3bd1885103a899c70.js"></script>
 </html>
